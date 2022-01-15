@@ -7,15 +7,21 @@
     class="align-center d-flex flex-column fill-height"
   >
     <h2>{{ listData.title }}</h2>
-    <v-card class="list rounded-lg d-flex flex-column align">
+    <v-card
+      class="list rounded-lg d-flex flex-column align overflow-y-auto "
+    >
       <draggable
-        class="overflow-y-auto"
+        class="card-container"
         :name="'flip-list'"
         v-bind="dragOptions"
         :move="onMove"
       >
         <transition-group class="pa-4" tag="ul">
-          <Card   v-for="(element, indexx) in listData.items" :cardTitle="element.name" :key="indexx" />
+          <Card
+            v-for="element in listData.items"
+            :cardTitle="element.name"
+            :key="element.id"
+          />
         </transition-group>
       </draggable>
     </v-card>
@@ -81,4 +87,10 @@ ul {
   list-style: none;
 }
 
+.card-container {
+  max-height: calc(100% - 24px);
+  min-height: calc(100% - 24px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 </style>
