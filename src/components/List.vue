@@ -6,23 +6,20 @@
     :key="listData.id"
     class="align-center d-flex flex-column fill-height"
   >
-    <h2>{{ listData.title }}</h2>
-    <v-card
-      class="list rounded-lg d-flex flex-column align overflow-y-auto "
-    >
+    <Label :labelData="listData.label" />
+    <v-card class="list rounded-lg d-flex flex-column align overflow-y-auto">
       <draggable
-        class="card-container"
-        :name="'flip-list'"
+        v-model="listData.items"
+        class="card-container pa-4"
         v-bind="dragOptions"
-        :move="onMove"
+        @change="changed(listData.label, $event)"
+        @end="sendAction"
       >
-        <transition-group class="pa-4" tag="ul">
           <Card
-            v-for="element in listData.items"
-            :cardTitle="element.name"
-            :key="element.id"
+            v-for="(element, index) in listData.items"
+            :cardData="element"
+            :key="index"
           />
-        </transition-group>
       </draggable>
     </v-card>
   </v-col>
@@ -30,23 +27,29 @@
 <script>
 import draggable from "vuedraggable";
 import Card from "./Card";
+import Label from "./Label";
 export default {
   components: {
     draggable,
     Card,
+    Label,
   },
   props: {
     listData: Object,
   },
   methods: {
-    onMove({ relatedContext, draggedContext }) {
-      const relatedElement = relatedContext.element;
-      const draggedElement = draggedContext.element;
-
-      return (
-        (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
-      );
+    changed(labelOfList,e) {
+        if (e.removed) {
+          e.removed.element.labels = e.removed.element.labels.filter(
+            (e) => e.id != labelOfList.id
+          );
+        } else if(e.added) {
+          e.added.element.labels.push(labelOfList);
+        }        
     },
+    sendAction(){
+       this.$store.dispatch('updateList', {list:this.listData, listId: this.listData.id})
+    }
   },
   computed: {
     dragOptions() {
@@ -55,7 +58,7 @@ export default {
         group: "description",
         ghostClass: "ghost",
       };
-    },
+    }, 
   },
 };
 </script>

@@ -6,7 +6,6 @@
 
 <script>
 import List from "../components/List";
-import {data} from "../mock/listsData.js"
 
 export default {
   name: "Home",
@@ -16,7 +15,7 @@ export default {
   },
   data(){
     return{
-      data:data
+      data: this.$store.state.lists
     }
   }
 };
