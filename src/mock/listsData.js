@@ -9,6 +9,7 @@ export const data = [
     items: [
       {
         id: 0,
+        index:0,
         title: "vue.draggable",
         labels: [
           {
@@ -22,6 +23,7 @@ export const data = [
       },
       {
         id: 1,
+        index:1,
         title: "draggable",
         labels: [
           {
@@ -35,6 +37,7 @@ export const data = [
       },
       {
         id: 2,
+        index:2,
         title: "component",
         labels: [
           {
@@ -48,6 +51,7 @@ export const data = [
       },
       {
         id: 3,
+        index:3,
         title: "for",
         labels: [
           {
@@ -70,6 +74,7 @@ export const data = [
     items: [
       {
         id: 0,
+        index:0,
         title: "vue.draggable",
         labels: [
           {

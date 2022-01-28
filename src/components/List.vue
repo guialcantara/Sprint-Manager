@@ -15,11 +15,12 @@
         @change="changed(listData.label, $event)"
         @end="sendAction"
       >
-          <Card
-            v-for="(element, index) in listData.items"
-            :cardData="element"
-            :key="index"
-          />
+        <Card
+          v-for="(element, index) in listData.items"
+          @eventEditCard="handleEditCard"
+          :cardData="element"
+          :key="index"
+        />
       </draggable>
     </v-card>
   </v-col>
@@ -37,19 +38,38 @@ export default {
   props: {
     listData: Object,
   },
+  data() {
+    return {
+      dialogStatus: false,
+      dialogData: {},
+    };
+  },
   methods: {
-    changed(labelOfList,e) {
-        if (e.removed) {
-          e.removed.element.labels = e.removed.element.labels.filter(
-            (e) => e.id != labelOfList.id
-          );
-        } else if(e.added) {
-          e.added.element.labels.push(labelOfList);
-        }        
+    changed(labelOfList, e) {
+      if (e.removed) {
+        e.removed.element.labels = e.removed.element.labels.filter(
+          (e) => e.id != labelOfList.id
+        );
+      } else if (e.added) {
+        e.added.element.labels.push(labelOfList);
+      }
     },
-    sendAction(){
-       this.$store.dispatch('updateList', {list:this.listData, listId: this.listData.id})
-    }
+    sendAction() {
+      this.$store.dispatch("updateList", {
+        list: this.listData,
+        listId: this.listData.id,
+      });
+    },
+    handleEditCard(value) {
+      this.listData.items.splice(
+        this.listData.items.findIndex((i) => i.id === value.id),
+        1,
+        value
+      );
+
+      this.sendAction();
+      this.$notify({ type: "success", text: "The operation completed" });
+    },
   },
   computed: {
     dragOptions() {
@@ -58,7 +78,7 @@ export default {
         group: "description",
         ghostClass: "ghost",
       };
-    }, 
+    },
   },
 };
 </script>
